@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm , UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from django.contrib import messages
 from .models import Ticket, UserProfile
@@ -21,11 +21,12 @@ def is_customer(user):
 # SignUp View for Customers
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
+        
         if form.is_valid():
             user = form.save()
 
-            # Check if the user already has a UserProfile
+            # Check if the user was successfully created
             if not hasattr(user, 'userprofile'):
                 UserProfile.objects.create(user=user)
 
@@ -39,6 +40,7 @@ def signup(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
+
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Account created for {username}!")
@@ -46,31 +48,42 @@ def signup(request):
             else:
                 messages.error(request, "Error during authentication after sign up.")
                 return redirect('tickets:signup')
+        else:
+            # Debug the form errors
+            print("Form errors:", form.errors)  # This will log form validation errors
+            messages.error(request, "Please correct the errors below.")
+            return render(request, 'tickets/signup.html', {'form': form})
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
+    
     return render(request, 'tickets/signup.html', {'form': form})
+
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
+            # Authenticate the user if the form is valid
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
-
             if user is not None:
                 login(request, user)
                 messages.success(request, "Successfully logged in!")
                 return redirect('tickets:ticket_list')
             else:
                 messages.error(request, "Invalid credentials")
+                print("Invalid credentials entered")
         else:
+            # Print more detailed form errors for debugging
+            print("Form errors:", form.errors)  # Print all form errors
+            for field, errors in form.errors.items():
+                print(f"Field: {field}, Errors: {errors}")  # Detailed error per field
             messages.error(request, "Form is not valid")
-            print("Form errors:", form.errors)
     else:
         form = LoginForm()
+
     return render(request, 'tickets/login.html', {'form': form})
 
-# Ticket List View for Customers
 @login_required
 def ticket_list(request):
     tickets = Ticket.objects.filter(customer=request.user)

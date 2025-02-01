@@ -1,19 +1,20 @@
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js" defer></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <h1 class="text-2xl font-bold text-center text-gray-800 mb-4">Login</h1>
+<body class="bg-gray-100 py-10">
+    <div class="max-w-lg mx-auto p-6 bg-white rounded shadow-md">
+        <h1 class="text-2xl font-semibold text-center mb-6">Login</h1>
 
         {% if messages %}
-        <div class="bg-yellow-100 text-yellow-800 p-2 mb-4 rounded">
-            <ul>
+        <div class="mb-4">
+            <ul class="text-red-500">
                 {% for message in messages %}
                     <li>{{ message }}</li>
                 {% endfor %}
@@ -23,25 +24,35 @@
 
         <form method="post">
             {% csrf_token %}
-            <div class="space-y-4">
-                {{ form.username|add_class:"border border-gray-300 p-2 w-full rounded" }}
-                {{ form.password|add_class:"border border-gray-300 p-2 w-full rounded" }}
-
-                <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">Login</button>
+            
+            <div class="mb-4">
+                <label for="id_username" class="block text-sm font-medium">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <ul class="text-red-500">
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
+            
+            <div class="mb-4">
+                <label for="id_password" class="block text-sm font-medium">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <ul class="text-red-500">
+                        {% for error in form.password.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Login</button>
         </form>
-
-        {% if form.errors %}
-        <div x-data="{ open: true }" x-show="open" class="bg-red-100 text-red-800 p-2 mt-4 rounded">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>{{ field.label }}: {{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+        
+        <p class="mt-4 text-center">Don't have an account? <a href="{% url 'tickets:signup' %}" class="text-blue-600 hover:text-blue-700">Sign up here</a></p>
     </div>
 </body>
 </html>

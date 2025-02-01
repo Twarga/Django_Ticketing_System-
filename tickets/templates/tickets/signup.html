@@ -1,28 +1,72 @@
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js" defer></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <h1 class="text-2xl font-bold text-center text-gray-800 mb-4">Create an Account</h1>
+<body class="bg-gray-100 py-10">
+    <div class="max-w-lg mx-auto p-6 bg-white rounded shadow-md">
+        <h1 class="text-2xl font-semibold text-center mb-6">Create an Account</h1>
+        
+        {% if messages %}
+        <div class="mb-4">
+            <ul class="text-red-500">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
-        <form method="post">
+        <form method="post" x-data="{ remember: false }">
             {% csrf_token %}
+            
             <div class="space-y-4">
-                {{ form.username|add_class:"border border-gray-300 p-2 w-full rounded" }}
-                {{ form.password1|add_class:"border border-gray-300 p-2 w-full rounded" }}
-                {{ form.password2|add_class:"border border-gray-300 p-2 w-full rounded" }}
+                <!-- Username Field -->
+                <div>
+                    <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                    {{ form.username|add_class:"border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" }}
+                </div>
 
-                <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">Signup</button>
+                <!-- First Name Field -->
+                <div>
+                    <label for="id_first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+                    {{ form.first_name|add_class:"border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" }}
+                </div>
+
+                <!-- Last Name Field -->
+                <div>
+                    <label for="id_last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    {{ form.last_name|add_class:"border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" }}
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
+                    {{ form.email|add_class:"border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" }}
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="id_password1" class="block text-sm font-medium text-gray-700">Password</label>
+                    {{ form.password1|add_class:"border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" }}
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div>
+                    <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    {{ form.password2|add_class:"border-gray-300 p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" }}
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">Sign Up</button>
             </div>
         </form>
-
-        <p class="mt-4 text-center text-gray-600">Already have an account? <a href="{% url 'tickets:login' %}" class="text-blue-500 hover:text-blue-600">Login here</a></p>
+        
+        <p class="mt-4 text-center">Already have an account? <a href="{% url 'tickets:login' %}" class="text-blue-600 hover:text-blue-700">Login here</a></p>
     </div>
 </body>
 </html>
