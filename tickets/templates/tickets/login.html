@@ -8,15 +8,15 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 py-10">
-    <div class="max-w-lg mx-auto p-6 bg-white rounded shadow-md">
-        <h1 class="text-2xl font-semibold text-center mb-6">Login</h1>
+<body class="bg-gray-100 py-12">
+    <div class="max-w-lg mx-auto p-8 bg-white rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Login</h1>
 
         {% if messages %}
-        <div class="mb-4">
-            <ul class="text-red-500">
+        <div class="mb-6">
+            <ul class="text-red-500 space-y-2">
                 {% for message in messages %}
-                    <li>{{ message }}</li>
+                    <li class="text-sm">{{ message }}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -25,34 +25,34 @@
         <form method="post">
             {% csrf_token %}
             
-            <div class="mb-4">
-                <label for="id_username" class="block text-sm font-medium">Username</label>
-                {{ form.username }}
+            <div class="mb-6">
+                <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" name="username" id="id_username" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ form.username.value }}" />
                 {% if form.username.errors %}
-                    <ul class="text-red-500">
+                    <ul class="text-red-500 space-y-1 mt-1">
                         {% for error in form.username.errors %}
-                            <li>{{ error }}</li>
+                            <li class="text-xs">{{ error }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
             </div>
             
-            <div class="mb-4">
-                <label for="id_password" class="block text-sm font-medium">Password</label>
-                {{ form.password }}
+            <div class="mb-6">
+                <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="password" id="id_password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
                 {% if form.password.errors %}
-                    <ul class="text-red-500">
+                    <ul class="text-red-500 space-y-1 mt-1">
                         {% for error in form.password.errors %}
-                            <li>{{ error }}</li>
+                            <li class="text-xs">{{ error }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
             </div>
             
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Login</button>
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Login</button>
         </form>
         
-        <p class="mt-4 text-center">Don't have an account? <a href="{% url 'tickets:signup' %}" class="text-blue-600 hover:text-blue-700">Sign up here</a></p>
+        <p class="mt-6 text-center text-gray-600 text-sm">Don't have an account? <a href="{% url 'tickets:signup' %}" class="text-blue-600 hover:text-blue-700">Sign up here</a></p>
     </div>
 </body>
 </html>
